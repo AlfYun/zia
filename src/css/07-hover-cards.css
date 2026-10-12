@@ -72,10 +72,12 @@
 .zia-folder-card-list {
   /* a tab's icon inset (measured: 27-hover-cards.js), less each row's own margin */
   --zia-folder-card-inset: 9.5px;
+  /* taller than a sidebar tab: each row carries a title and a URL line */
+  --zia-folder-card-row-height: 42px;
   padding: calc(var(--zia-folder-card-inset) - var(--zia-folder-card-gap)) var(--zia-folder-card-inset);
-  /* ten rows exactly: ten tab heights and eleven margins */
+  /* ten rows exactly: ten row heights and eleven margins */
   --zia-folder-card-gap: calc(2 * var(--zia-tab-gap));
-  max-height: calc(10 * var(--zia-tab-height) + 11 * var(--zia-folder-card-gap) + 2 * (var(--zia-folder-card-inset) - var(--zia-folder-card-gap)));
+  max-height: calc(10 * var(--zia-folder-card-row-height) + 11 * var(--zia-folder-card-gap) + 2 * (var(--zia-folder-card-inset) - var(--zia-folder-card-gap)));
   box-sizing: border-box;
   overflow-y: auto;
   scrollbar-width: none;
@@ -86,7 +88,7 @@
   align-items: center;
   gap: 8px;
 
-  height: var(--zia-tab-height);
+  height: var(--zia-folder-card-row-height);
   margin-block: var(--zia-folder-card-gap);
 
   padding-inline: 9px 6px;
@@ -174,11 +176,33 @@
 }
 
 .zia-folder-card-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
+}
+
+.zia-folder-card-title {
   flex: 1;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.zia-folder-card-url {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--zia-tab-card-sub);
+  font-size: 11px;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 @keyframes zia-tab-card-in {

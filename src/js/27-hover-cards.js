@@ -307,9 +307,16 @@
         speaker.setAttribute("title", muted ? "Unmute tab" : "Mute tab");
         row.append(speaker);
       }
-      const label = document.createElementNS(XHTML_NS, "span");
+      const label = document.createElementNS(XHTML_NS, "div");
       label.className = "zia-folder-card-label";
-      label.textContent = tab.label || "New Tab";
+      const title = document.createElementNS(XHTML_NS, "span");
+      title.className = "zia-folder-card-title";
+      title.textContent = tab.label || "New Tab";
+      const url = document.createElementNS(XHTML_NS, "span");
+      url.className = "zia-folder-card-url";
+      url.textContent = tabCardKind(tab) === "new" ? "" : savedUrlOf(tab);
+      url.hidden = !url.textContent;
+      label.append(title, url);
       row.append(label);
 
       const unloaded = tab.getAttribute("pending") === "true" && tab.getAttribute("folder-active") !== "true";
@@ -328,7 +335,7 @@
     add.setAttribute("zia-new-tab", "true");
     add.append(newTabButtonIcon());
     const addLabel = document.createElementNS(XHTML_NS, "span");
-    addLabel.className = "zia-folder-card-label";
+    addLabel.className = "zia-folder-card-title";
     addLabel.textContent = "New Tab";
 
     const newTabButton = document.querySelector("#vertical-tabs-newtab-button, #tabs-newtab-button");
