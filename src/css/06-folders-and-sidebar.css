@@ -463,6 +463,7 @@
   &[zia-folder-color="pink"] { --zia-folder-swatch: var(--zia-fc-pink); }
   &[zia-folder-color="red"] { --zia-folder-swatch: var(--zia-fc-red); }
   &[zia-folder-color="orange"] { --zia-folder-swatch: var(--zia-fc-orange); }
+  &[zia-folder-color="custom"] { --zia-folder-swatch: var(--zia-folder-custom-swatch, var(--zia-fc-white)); }
 
   &[zia-folder-color]::after {
     opacity: 1;
@@ -896,5 +897,49 @@ zen-workspace[collapsedpinnedtabs] :is(zen-folder, tab-group:not([split-view-gro
 
   to {
     background-position: 0 0;
+  }
+}
+
+/* "Custom…" in the folder colour submenu (23-folder-colours.js): a small
+   popup with a hex field, anchored to the folder it was opened from */
+panel#zia-folder-custom-color-panel {
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+#zia-folder-custom-color-panel .zia-folder-custom-color-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background-color: var(--zia-tab-card-bg);
+  border-radius: calc(9px * var(--zia-squircle-grow));
+  corner-shape: var(--zia-squircle) !important;
+  box-shadow: var(--zia-glass-edge-lit), 0 6px 20px rgba(0, 0, 0, 0.32);
+}
+
+#zia-folder-custom-color-panel input {
+  width: 90px;
+  height: 26px;
+  box-sizing: border-box;
+  padding: 0 8px;
+  margin: 0;
+  border: none;
+  border-radius: calc(7px * var(--zia-squircle-grow));
+  corner-shape: var(--zia-squircle) !important;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgb(255, 255, 255);
+  font: 500 11.5px ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  outline: none;
+
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  &[invalid] {
+    color: rgb(255, 140, 130);
   }
 }

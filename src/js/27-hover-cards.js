@@ -284,6 +284,11 @@
     card.ziaFolder = folder;
     const color = folder.getAttribute("zia-folder-color");
     setAttr(card, "zia-folder-color", color || null);
+    setStyle(
+      card,
+      "--zia-folder-custom-swatch",
+      color === "custom" ? getComputedStyle(folder).getPropertyValue("--zia-folder-custom-swatch").trim() || null : null
+    );
     const rows = [];
     for (const tab of tabsInFolder(folder)) {
       const row = document.createElementNS(XHTML_NS, "div");
