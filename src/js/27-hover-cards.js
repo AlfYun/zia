@@ -34,7 +34,7 @@
         return "";
       }
       if (/^https?$/.test(uri.scheme)) {
-        return uri.host.replace(/^www\./, "");
+        return uri.hostPort.replace(/^www\./, "");
       }
       if (uri.scheme === "about") {
         const name = uri.filePath.split(/[?#]/)[0].toLowerCase();
