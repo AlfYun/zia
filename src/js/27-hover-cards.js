@@ -314,7 +314,11 @@
       title.textContent = tab.label || "New Tab";
       const url = document.createElementNS(XHTML_NS, "span");
       url.className = "zia-folder-card-url";
-      url.textContent = tabCardKind(tab) === "new" ? "" : savedUrlOf(tab);
+      // The live address (it's what the title above came from, port and
+      // all) unless the tab's never been loaded this session, when it's
+      // still about:blank and the saved one is all there is.
+      const liveSpec = tab.linkedBrowser?.currentURI?.spec;
+      url.textContent = tabCardKind(tab) === "new" ? "" : (liveSpec && liveSpec !== "about:blank" ? liveSpec : savedUrlOf(tab));
       url.hidden = !url.textContent;
       label.append(title, url);
       row.append(label);
@@ -449,6 +453,7 @@
     // Compact mode hides the sidebar once the pointer leaves it, and the cards sit
     // outside it: hold it open, as Zen does for its own menus, while on a card.
     let holding = false;
+    let holdWatchdog = 0;
     const holdSidebar = (on) => {
       if (on === holding) {
         return;
@@ -457,10 +462,21 @@
         holding = !toolbox.hasAttribute("has-popup-menu");
         if (holding) {
           toolbox.setAttribute("has-popup-menu", "true");
+          // A missed mouseleave (fast pointer, a card that closed under it)
+          // would otherwise leave the sidebar held open for good: checked
+          // against reality every so often, not just on events.
+          clearInterval(holdWatchdog);
+          holdWatchdog = setInterval(() => {
+            if (!toolbox.matches(":hover") && !cardHovered()) {
+              holdSidebar(false);
+            }
+          }, 500);
         }
         return;
       }
       holding = false;
+      clearInterval(holdWatchdog);
+      holdWatchdog = 0;
       toolbox.removeAttribute("has-popup-menu");
       try {
         const manager = window.gZenCompactModeManager;
